@@ -217,7 +217,7 @@ function restaurantAPI(queryValues) {
         //using the keys from firebase to get a token (jtsai)
 
         var settings = {
-            "async": false,
+            "async": true,
             "crossDomain": true,
             "url": queryURL,
             "method": "GET",
