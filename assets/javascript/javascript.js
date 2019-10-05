@@ -68,11 +68,11 @@ $("section").hide();
 // You guys will have to create the search queries in your function and pass it here
 function flightAPI(queryValues) {
     //base url for the API
-    var queryBaseURL = "https://test.api.amadeus.com/v1/"; 
+    var queryBaseURL = "https://test.api.amadeus.com/"; 
 
     //the final URL that has the query terms added to the end
     var queryURL = 
-        queryBaseURL + "shopping/flight-offers?" + queryValues;
+        queryBaseURL + "v1/shopping/flight-offers?" + queryValues;
 
     //So I'm using an API that requires an authentication token and it really doesn't want you to commit your key and stuff anywhere
     
@@ -86,7 +86,7 @@ function flightAPI(queryValues) {
 
         //using the keys from firebase to get a token (this token expires so I figured it'd be safer to make sure it's called whenever you need this flightAPI query) (jtsai)
         var auth = {
-            "url": queryBaseURL + "security/oauth2/token",
+            "url": queryBaseURL + "v1/security/oauth2/token",
             "method": "POST",
             "timeout": 0,
             "data": {
@@ -136,11 +136,11 @@ function flightAPI(queryValues) {
 // You guys will have to create the search queries in your function and pass it here
 function hotelAPI(queryValues) {
     //base url for the API
-    var queryBaseURL = "https://test.api.amadeus.com/v2/"; 
+    var queryBaseURL = "https://test.api.amadeus.com/"; 
 
     //the final URL that has the query terms added to the end
     var queryURL = 
-        queryBaseURL + "shopping/hotel-offers?" + queryValues;
+        queryBaseURL + "v2/shopping/hotel-offers?" + queryValues;
     
     //referencing firebase in order to get keys from there (jtsai)
     dbAuth.once("value", function(snapshot) {
@@ -151,7 +151,7 @@ function hotelAPI(queryValues) {
 
         //using the keys from firebase to get a token (this token expires so I figured it'd be safer to make sure it's called whenever you need this hotelAPI query) (jtsai)
         var auth = {
-            "url": queryBaseURL + "security/oauth2/token",
+            "url": queryBaseURL + "v1/security/oauth2/token",
             "method": "POST",
             "timeout": 0,
             "data": {
