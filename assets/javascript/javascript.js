@@ -119,7 +119,7 @@ function flightAPI(queryValues) {
             $.ajax(settings).then( function(response) {
                 var queryResult = response;
                 // console.log("AJAX YOU BETTER WORK!");
-                console.log(queryResult);
+                // console.log(queryResult);
 
                 //variables you want will go here
                 //Example for printing out multiple 
@@ -184,7 +184,7 @@ function hotelAPI(queryValues) {
             $.ajax(settings).then( function(response) {
                 var queryResult = response;
                 // console.log("AJAX YOU BETTER WORK!");
-                console.log(queryResult);
+                // console.log(queryResult);
 
                 //variables you want will go here
                 //Example for printing out multiple 
@@ -233,7 +233,7 @@ function restaurantAPI(queryValues) {
 
         $.ajax(settings).then( function(response) {
             var queryResult = response;
-            console.log(response);
+            // console.log(response);
             //variables you want will go here
             //Example for printing out multiple 
             // for(let i=0; i < queryResult.data[i]) {
