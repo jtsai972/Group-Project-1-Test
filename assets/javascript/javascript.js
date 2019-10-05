@@ -31,15 +31,37 @@ const database = firebase.database();
 const dbAuth = database.ref('/authentication');
 
 /* ====================================
+ * Non-database Global Variables
+ * ==================================== */
+
+// var key = {  };
+// dbAuth.push(key);
+
+/* ====================================
+ * Initialization of document
+ * ==================================== */
+//Default hiding all the sections
+$("section").hide();
+
+
+/* ====================================
+ * Other functions
+ * ==================================== */
+//not sure where these should go, guess it depends on what's the most convenient
+
+
+/* ====================================
  * Ajax queries
  * ==================================== */
 
-var testFlightURL = "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=MAD&destination=PAR&departureDate=2019-12-01&returnDate=2019-12-28";
+var testFlightURL = "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=MAD&destination=PAR&departureDate=2019-12-01&returnDate=2019-12-28 &max10";
 
+// You guys will have to create the search queries in your function and pass it here
 function flightAPI(queryValues) {
     //base url for the API
     var queryBaseURL = "https://test.api.amadeus.com/v1/"; 
 
+    //the final URL that has the query terms added to the end
     var queryURL = 
         queryBaseURL + "shopping/flight-offers?" + queryValues;
 
@@ -67,10 +89,10 @@ function flightAPI(queryValues) {
 
         $.ajax(auth).done(function (response) {
             token = response;
-            console.log(token);
-            console.log("Access token:" + token.access_token);
+            //console.log(token);
+            //console.log("Access token:" + token.access_token);
             var tokenBearer = "Bearer " + token.access_token;
-            console.log(tokenBearer);
+            //console.log(tokenBearer);
 
             //once authentication is done:
             // Finally starting the actual ajax query for flight data(jtsai)
@@ -87,33 +109,127 @@ function flightAPI(queryValues) {
 
             $.ajax(settings).then( function(response) {
                 var queryResult = response;
-                console.log("AJAX YOU BETTER WORK!");
-                console.log(queryResult);
+                // console.log("AJAX YOU BETTER WORK!");
+                // console.log(queryResult);
 
+                //variables you want will go here
+                //Example for printing out multiple 
+                // for(let i=0; i < queryResult.data[i]) {
+                //     imgSrc = queryResult.data[i].<more path here>
+                //     <more data and variables here>
+                //     print();
+                // }
             });
         });
     });
 }
 
+var testHotelURL = "https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode=LON";
 
-/*
 
-{
-                url : "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=MAD&destination=PAR&departureDate=2019-12-01&returnDate=2019-12-28",
-                method : "GET",
-                beforeSend: function (xhr) { 
-                    console.log("Is this doing stuff?");
-                    xhr.setRequestHeader ( 'Authorization', tokenBearer );
-                    xhr.setRequestHeader( "Access-Control-Allow-Origin", "*" );
-                    xhr.setRequestHeader( "Accept", "application/vnd.amadeus+json" );
-                },
-                crossDomain : true,
-                contentType : "text/json",
-                dataType: "jsonp", 
-                headers : {
-                    "Authorization" : tokenBearer,
-                    "Accept": "application/vnd.amadeus+json"
+// You guys will have to create the search queries in your function and pass it here
+function hotelAPI(queryValues) {
+    //base url for the API
+    var queryBaseURL = "https://test.api.amadeus.com/v2/"; 
+
+    //the final URL that has the query terms added to the end
+    var queryURL = 
+        queryBaseURL + "shopping/hotel-offers?" + queryValues;
+    
+    //referencing firebase in order to get keys from there (jtsai)
+    dbAuth.once("value", function(snapshot) {
+        var cid, csec;  //creating variables for keys
+        cid = snapshot.child('amadeusKey').val();
+        csec = snapshot.child('amadeusSecret').val();
+        //console.log(`cId: ${cid} cSec: ${csec}`);
+
+        //using the keys from firebase to get a token (this token expires so I figured it'd be safer to make sure it's called whenever you need this hotelAPI query) (jtsai)
+        var auth = {
+            "url": queryBaseURL + "security/oauth2/token",
+            "method": "POST",
+            "timeout": 0,
+            "data": {
+                "client_id": cid,
+                "client_secret": csec,
+                "grant_type": "client_credentials"
+            }
+        };
+
+        $.ajax(auth).done(function (response) {
+            token = response;
+            //console.log(token);
+            //console.log("Access token:" + token.access_token);
+            var tokenBearer = "Bearer " + token.access_token;
+            //console.log(tokenBearer);
+
+            //once authentication is done:
+            // Finally starting the actual ajax query for hotel data(jtsai)
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": queryURL,
+                "method": "GET",
+                "headers": {
+                    "Accept": "application/vnd.amadeus+json",
+                    "Authorization": tokenBearer
                 }
             }
 
-*/
+            $.ajax(settings).then( function(response) {
+                var queryResult = response;
+                // console.log("AJAX YOU BETTER WORK!");
+                // console.log(queryResult);
+
+                //variables you want will go here
+                //Example for printing out multiple 
+                // for(let i=0; i < queryResult.data[i]) {
+                //     imgSrc = queryResult.data[i].<more path here>
+                //     <more data and variables here>
+                //     print();
+                // }
+            });
+        });
+    });
+}
+
+function restaurantAPI(queryValues) {
+    //base url for the API
+    var queryBaseURL = "https://api.yelp.com/v3/"; 
+
+    //final yelp query
+    var queryURL = 
+        queryBaseURL + "businesses/search?" + queryValues;
+
+    //referencing firebase in order to get keys from there (jtsai)
+    dbAuth.once("value", function(snapshot) {
+        var cid; //creating variables for keys
+        cid = snapshot.child('yelpKey').val();
+        //console.log(`cId: ${cid} cSec: ${csec}`);
+
+        var tokenBearer = "Bearer " + cid; 
+
+        //using the keys from firebase to get a token (jtsai)
+
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": queryURL,
+            "method": "GET",
+            "headers": {
+                "Accept": "*/*",
+                "Authorization": tokenBearer
+            }
+        }
+
+        $.ajax(settings).then( function(response) {
+            var queryResult = response;
+            //variables you want will go here
+            //Example for printing out multiple 
+            // for(let i=0; i < queryResult.data[i]) {
+            //     imgSrc = queryResult.data[i].<more path here>
+            //     <more data and variables here>
+            //     print();
+            // }
+        });
+    })
+}
