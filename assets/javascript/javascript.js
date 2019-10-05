@@ -79,14 +79,8 @@ function flightAPI(queryValues) {
                 "method": "GET",
                 "headers": {
                     "Accept": "application/vnd.amadeus+json",
-                    "Authorization": tokenBearer;
-                    "User-Agent": "PostmanRuntime/7.17.1",
-                    "Cache-Control": "no-cache",
-                    "Postman-Token": "0252d14a-a60c-4ae2-ac1c-b3b5424de100,c657bae3-ee57-4f36-9ad4-6868c49fd694",
-                    "Host": "test.api.amadeus.com",
-                    "Accept-Encoding": "gzip, deflate",
-                    "Connection": "keep-alive",
-                    "cache-control": "no-cache"
+                    "Authorization": tokenBearer,
+                    "Host": "test.api.amadeus.com"
                 }
             }
 
