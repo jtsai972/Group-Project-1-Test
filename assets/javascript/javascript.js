@@ -34,6 +34,8 @@ const dbAuth = database.ref('/authentication');
  * Ajax queries
  * ==================================== */
 
+var testFlightURL = "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=MAD&destination=PAR&departureDate=2019-12-01&returnDate=2019-12-28";
+
 function flightAPI(queryValues) {
     //base url for the API
     var queryBaseURL = "https://test.api.amadeus.com/v1/"; 
@@ -75,7 +77,7 @@ function flightAPI(queryValues) {
             var settings = {
                 "async": true,
                 "crossDomain": true,
-                "url": "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=MAD&destination=PAR&departureDate=2019-12-01&returnDate=2019-12-28",
+                "url": queryURL,
                 "method": "GET",
                 "headers": {
                     "Accept": "application/vnd.amadeus+json",
@@ -87,6 +89,7 @@ function flightAPI(queryValues) {
                 var queryResult = response;
                 console.log("AJAX YOU BETTER WORK!");
                 console.log(queryResult);
+
             });
         });
     });
