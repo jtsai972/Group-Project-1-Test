@@ -84,7 +84,7 @@ function flightAPI(queryValues) {
                 contentType : "text/json",
                 dataType: "jsonp", 
                 headers : {
-                    "Authorization" : "Bearer " + token.access_token,
+                    "Authorization" : tokenBearer,
                     "Accept": "application/vnd.amadeus+json"
                 }
             }).then( function(response) {
