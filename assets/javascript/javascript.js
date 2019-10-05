@@ -200,11 +200,11 @@ function hotelAPI(queryValues) {
 
 function restaurantAPI(queryValues) {
     //base url for the API
-    var queryBaseURL = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/"; 
+    var queryBaseURL = "https://api.yelp.com/v3/"; 
 
     //final yelp query
     var queryURL = 
-        queryBaseURL + "businesses/search?" + queryValues;
+        "https://cors-anywhere.herokuapp.com/" + queryBaseURL + "businesses/search?" + queryValues;
 
     //referencing firebase in order to get keys from there (jtsai)
     dbAuth.once("value", function(snapshot) {
@@ -217,10 +217,13 @@ function restaurantAPI(queryValues) {
         //using the keys from firebase to get a token (jtsai)
 
         var settings = {
-            "async": true,
+            "async": false,
             "crossDomain": true,
             "url": queryURL,
             "method": "GET",
+            "contentType": "text/json",
+            "dataType": "json",
+            "cache": true,
             "headers": {
                 "Accept": "*/*",
                 "Access-Control-Allow-Origin" : "*",
