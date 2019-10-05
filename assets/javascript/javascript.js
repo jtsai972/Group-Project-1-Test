@@ -66,12 +66,43 @@ function flightAPI(queryValues) {
         $.ajax(auth).done(function (response) {
             token = response;
             console.log(token);
-            console.log(token.access_token);
+            console.log("Access token:" + token.access_token);
             var tokenBearer = "Bearer " + token.access_token;
+            console.log(tokenBearer);
 
             //once authentication is done:
             // Finally starting the actual ajax query for flight data(jtsai)
-            $.ajax({
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=MAD&destination=PAR&departureDate=2019-12-01&returnDate=2019-12-28",
+                "method": "GET",
+                "headers": {
+                    "Accept": "application/vnd.amadeus+json",
+                    "Authorization": tokenBearer;
+                    "User-Agent": "PostmanRuntime/7.17.1",
+                    "Cache-Control": "no-cache",
+                    "Postman-Token": "0252d14a-a60c-4ae2-ac1c-b3b5424de100,c657bae3-ee57-4f36-9ad4-6868c49fd694",
+                    "Host": "test.api.amadeus.com",
+                    "Accept-Encoding": "gzip, deflate",
+                    "Connection": "keep-alive",
+                    "cache-control": "no-cache"
+                }
+            }
+
+            $.ajax(settings).then( function(response) {
+                var queryResult = response;
+                console.log("AJAX YOU BETTER WORK!");
+                console.log(queryResult);
+            });
+        });
+    });
+}
+
+
+/*
+
+{
                 url : "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=MAD&destination=PAR&departureDate=2019-12-01&returnDate=2019-12-28",
                 method : "GET",
                 beforeSend: function (xhr) { 
@@ -87,10 +118,6 @@ function flightAPI(queryValues) {
                     "Authorization" : tokenBearer,
                     "Accept": "application/vnd.amadeus+json"
                 }
-            }).then( function(response) {
-                var queryResult = response;
-                console.log("AJAX YOU BETTER WORK!");
-            });
-        });
-    });
-}
+            }
+
+*/
