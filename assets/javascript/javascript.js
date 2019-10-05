@@ -79,8 +79,7 @@ function flightAPI(queryValues) {
                 "method": "GET",
                 "headers": {
                     "Accept": "application/vnd.amadeus+json",
-                    "Authorization": tokenBearer,
-                    "Host": "test.api.amadeus.com"
+                    "Authorization": tokenBearer
                 }
             }
 
