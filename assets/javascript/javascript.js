@@ -74,7 +74,7 @@ function flightAPI(queryValues) {
                 beforeSend: function (xhr) { 
                     console.log("Is this doing stuff?");
                     xhr.setRequestHeader (
-                        'Authorization', "Bearer" + token.access_token
+                        'Authorization', "Bearer " + token.access_token
                     );
                     xhr.setRequestHeader(
                         "Access-Control-Allow-Origin", "*"
@@ -83,13 +83,13 @@ function flightAPI(queryValues) {
                         "Accept", "application/vnd.amadeus+json"
                     );
                 },
-                "url" : queryURL,
-                "method" : "GET",
-                "crossDomain": true,
-                "contentType": "text/json",
-                "dataType": "jsonp", 
-                "headers" : {
-                    "Authorization" : "Bearer" + token.access_token,
+                url : queryURL,
+                method : "GET",
+                crossDomain : true,
+                contentType : "text/json",
+                dataType: "jsonp", 
+                headers : {
+                    "Authorization" : "Bearer " + token.access_token,
                     "Accept": "application/vnd.amadeus+json"
                 }
             }).then( function(response) {
