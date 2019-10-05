@@ -233,6 +233,7 @@ function restaurantAPI(queryValues) {
 
         $.ajax(settings).then( function(response) {
             var queryResult = response;
+            console.log(response);
             //variables you want will go here
             //Example for printing out multiple 
             // for(let i=0; i < queryResult.data[i]) {
