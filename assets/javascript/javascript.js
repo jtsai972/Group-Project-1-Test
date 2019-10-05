@@ -67,24 +67,19 @@ function flightAPI(queryValues) {
             token = response;
             console.log(token);
             console.log(token.access_token);
+            var tokenBearer = "Bearer " + token.access_token;
 
             //once authentication is done:
             // Finally starting the actual ajax query for flight data(jtsai)
             $.ajax({
+                url : "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=MAD&destination=PAR&departureDate=2019-12-01&returnDate=2019-12-28",
+                method : "GET",
                 beforeSend: function (xhr) { 
                     console.log("Is this doing stuff?");
-                    xhr.setRequestHeader (
-                        'Authorization', "Bearer " + token.access_token
-                    );
-                    xhr.setRequestHeader(
-                        "Access-Control-Allow-Origin", "*"
-                    );
-                    xhr.setRequestHeader(
-                        "Accept", "application/vnd.amadeus+json"
-                    );
+                    xhr.setRequestHeader ( 'Authorization', tokenBearer );
+                    xhr.setRequestHeader( "Access-Control-Allow-Origin", "*" );
+                    xhr.setRequestHeader( "Accept", "application/vnd.amadeus+json" );
                 },
-                url : queryURL,
-                method : "GET",
                 crossDomain : true,
                 contentType : "text/json",
                 dataType: "jsonp", 
