@@ -12,6 +12,7 @@
  * 
  * resource for flight and hotel search:
  * https://documenter.getpostman.com/view/2672636/RWEcPfuJ?version=latest#8196c48f-30f9-4e3b-8590-e22f96da8326
+ * 
  * */
 
 /* ====================================
@@ -26,7 +27,8 @@ var config = {
 };
 
 firebase.initializeApp(config); //starting database (jtsai)
-//a couple of database variables that will be referenced (jtsai)
+
+//setting database variables, one for the database itself, and one for the authentication stuff (jtsai)
 const database = firebase.database();
 const dbAuth = database.ref('/authentication');
 
@@ -52,41 +54,23 @@ var testRestaurantValue = "term=delis&latitude=37.786882&longitude=-122.399972";
 /* ====================================
  * Initialization of document
  * ==================================== */
+//Default hiding all the sections
+$("section").hide();
 
-
-/* ====================================
- * On Clicks
- * ==================================== */
-$("nav a").on("click", function() {
-    //making sure no other classes have the class of active;
-    $("nav a").removeClass("active");
-    $("section").removeClass("active");
-
-    //setting this anchor tag to active 
-    $(this).addClass("active");
-
-    //getting the id of the related section
-    let section = $(this).attr("href");
-
-    //making sure we got the right thing
-    console.log("Section:" + section); 
-
-    //make the relative section active (to show content)
-    $(section).addClass("active");
-})
 
 /* ====================================
  * Other functions
  * ==================================== */
-//not sure where these should go, guess it depends on what's the most convenient
+/* not sure where these should go, guess it depends on what's the most convenient */
 
 
 /* ====================================
  * Ajax queries
  * ==================================== */
-// You guys will have to create the search queries in your function and pass it here
+/* You guys will have to create the search queries in your function and pass it here */
 function flightAPI(queryValues) {
-    //base url for the API
+
+    //base url for the API, this is the api site we're connecting to
     var queryBaseURL = "https://test.api.amadeus.com/"; 
 
     //the final URL that has the query terms added to the end
@@ -122,8 +106,9 @@ function flightAPI(queryValues) {
             var tokenBearer = "Bearer " + token.access_token;
             //console.log(tokenBearer);
 
-            //once authentication is done:
-            // Finally starting the actual ajax query for flight data(jtsai)
+             /** ----------------------------------------------
+             *  Once we've authenticated stuff
+             * ---------------------------------------------- */
             var settings = {
                 "async": true,
                 "crossDomain": true,
@@ -140,13 +125,33 @@ function flightAPI(queryValues) {
                 // console.log("AJAX YOU BETTER WORK!");
                 // console.log(queryResult);
 
-                //variables you want will go here
-                //Example for printing out multiple 
-                // for(let i=0; i < queryResult.data[i]) {
-                //     imgSrc = queryResult.data[i].<more path here>
-                //     <more data and variables here>
-                //     print();
-                // }
+                /** ----------------------------------------------
+                 *  variables for stuff you want to get from the API query go here
+                 *  
+                 *  Example for getting data you want
+                 *      var hotelName = queryResult.name;
+                 *  
+                 *  Example for printing out data multiple times
+                 *      for(let i=0; i < queryResult.data[i]) {
+                 *  
+                 *      //Getting the data we wanted
+                 *          //(getting the source url of the image from the queryResults Object)
+                 *          imgSrc = queryResult.data[i].url; 
+                 *  
+                 *          //(getting the description data from the queryResults Object)
+                 *          restaurantDescription = queryResult.data[i].description 
+                 *  
+                 *          <more data and variables here>
+                 *          
+                 *          //Printing the data we wanted here
+                 *  
+                 *          //(setting the image source url for an image in the html)
+                 *          $('img').attr('src') = imgSrc; 
+                 *  
+                 *          //(making a paragraph with restaurantDescription content as its text)
+                 *          $('p').text(restaurantDescription);
+                 *      }
+                 * ---------------------------------------------- */
             });
         });
     });
@@ -205,20 +210,41 @@ function hotelAPI(queryValues) {
                 // console.log("AJAX YOU BETTER WORK!");
                 // console.log(queryResult);
 
-                //variables you want will go here
-                //Example for printing out multiple 
-                // for(let i=0; i < queryResult.data[i]) {
-                //     imgSrc = queryResult.data[i].<more path here>
-                //     <more data and variables here>
-                //     print();
-                // }
+                /** ----------------------------------------------
+                 *  variables for stuff you want to get from the API query go here
+                 *  
+                 *  Example for getting data you want
+                 *      var hotelName = queryResult.name;
+                 *  
+                 *  Example for printing out data multiple times
+                 *      for(let i=0; i < queryResult.data[i]) {
+                 *  
+                 *      //Getting the data we wanted
+                 *          //(getting the source url of the image from the queryResults Object)
+                 *          imgSrc = queryResult.data[i].url; 
+                 *  
+                 *          //(getting the description data from the queryResults Object)
+                 *          restaurantDescription = queryResult.data[i].description 
+                 *  
+                 *          <more data and variables here>
+                 *          
+                 *          //Printing the data we wanted here
+                 *  
+                 *          //(setting the image source url for an image in the html)
+                 *          $('img').attr('src') = imgSrc; 
+                 *  
+                 *          //(making a paragraph with restaurantDescription content as its text)
+                 *          $('p').text(restaurantDescription);
+                 *      }
+                 * ---------------------------------------------- */
             });
         });
     });
 }
 
 function restaurantAPI(queryValues) {
-    //base url for the API
+
+    /* this is the url for the API servers. All things related to this API go through this URL */
     var queryBaseURL = "https://api.yelp.com/v3/"; 
 
     //final yelp query
@@ -229,12 +255,12 @@ function restaurantAPI(queryValues) {
     dbAuth.once("value", function(snapshot) {
         var cid; //creating variables for keys
         cid = snapshot.child('yelpKey').val();
-        //console.log(`cId: ${cid} cSec: ${csec}`);
+        //console.log(`yelp token: ${cid}`);
 
+        /* Setting up the text for the token header */
         var tokenBearer = "Bearer " + cid; 
 
-        //using the keys from firebase to get a token (jtsai)
-
+        /* using the keys from firebase to get a token (jtsai) */
         var settings = {
             "async": true,
             "crossDomain": true,
@@ -253,13 +279,27 @@ function restaurantAPI(queryValues) {
         $.ajax(settings).then( function(response) {
             var queryResult = response;
             // console.log(response);
-            //variables you want will go here
-            //Example for printing out multiple 
-            // for(let i=0; i < queryResult.data[i]) {
-            //     imgSrc = queryResult.data[i].<more path here>
-            //     <more data and variables here>
-            //     print();
-            // }
+
+            /** ----------------------------------------------
+             *  variables for stuff you want to get from the API query go here
+             *  
+             *  Example for getting data you want
+             *      var hotelName = queryResult.name;
+             *  
+             *  Example for printing out data multiple times
+             *      for(let i=0; i < queryResult.data[i]) {
+             *  
+             *      //Getting the data we wanted
+             *          //(getting the source url of the image from the queryResults Object)
+             *          imgSrc = queryResult.data[i].url; 
+             *          restaurantDescription = queryResult.data[i].description //(getting the description data from the queryResults Object)
+             *          <more data and variables here>
+             *          
+             *          //Printing the data we wanted here
+             *          $('img').attr('src') = imgSrc; //setting the image source url for an image in the html
+             *          $('p').text(restaurantDescription); //making a paragraph with restaurantDescription content as its text
+             *      }
+             * ---------------------------------------------- */
         });
     })
 }
